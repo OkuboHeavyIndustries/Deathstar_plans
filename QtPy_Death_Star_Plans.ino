@@ -1,11 +1,15 @@
 //9th June 2023
 //QtPy Death Star Plans by Okubo Heavy Industries based on
 //3D_Cube for Arduino OLED module by Colin Ord, 9/1/2015
+//Trench run animation by reddit user u/marweking 7/5/2024
 
 
 #include <U8g2lib.h>
 #include "deathstar.h"
-//#include "ArduinoLowPower.h"
+#include "zoom.h"
+#include "trench.h"
+#include "boom.h"
+
 
 void clearOLED();
 
@@ -196,6 +200,42 @@ void draw_wireframe2(void){
 
 void loop(void)
 {
+  //startup
+  u8g2.setMaxClipWindow();
+u8g2.nextPage();
+delay(2000);
+ scalefactor = 0;
+  clearOLED();
+  delay(2000);
+  u8g2.clearBuffer();
+    u8g2.setDrawColor(1);
+    u8g2.drawBox(0,0,128,64);
+    u8g2.sendBuffer();
+    delay(100);
+    u8g2.setDrawColor(0);
+    u8g2.clearBuffer();
+    u8g2.drawBox(0,0,128,64);
+    u8g2.sendBuffer();
+    delay(500);
+    //cursor flash
+    for (int i = 0; i < 3; i++) {
+    
+    u8g2.setDrawColor(1);
+    u8g2.clearBuffer();
+    u8g2.drawBox(1,1,3,5);
+    u8g2.sendBuffer();
+    delay(300);
+    
+    u8g2.clearBuffer();
+    u8g2.setDrawColor(0);
+    u8g2.drawBox(1,1,3,5);
+    u8g2.sendBuffer();
+    delay(300);
+    }
+   
+    u8g2.setDrawColor(1);
+    u8g2.clearBuffer();
+
 //picture loop
 
 u8g2.setClipWindow(27, 0, 100, 64);
@@ -457,58 +497,32 @@ u8g2.clearBuffer();
 
 
 }
-/* do{
-    
-  for (int lg = 0; lg < 72; lg=lg+1) {
-  for (int vl = 28; vl < 100; vl=vl+lg) {
-    u8g2.drawLine(vl,0,vl,64);
-    }
-   for (int hl = 0; hl < 64; hl=hl+lg) {
-    u8g2.drawLine(28,hl,100,hl);
-    } 
-    u8g2.nextPage();
-    
-    } 
-  }while (u8g2.nextPage());
-  
- */ 
-  
-delay(1000);
 
-u8g2.setMaxClipWindow();
+delay(100);
+
+
+for (int z = 1; z<96; z++){
+u8g2.drawXBMP(32, 0, 62, 64, explosionallArray[z]);
 u8g2.nextPage();
-delay(2000);
- scalefactor = 0;
-  clearOLED();
-  delay(2000);
-  u8g2.clearBuffer();
-    u8g2.setDrawColor(1);
-    u8g2.drawBox(0,0,128,64);
-    u8g2.sendBuffer();
-    delay(100);
-    u8g2.setDrawColor(0);
-    u8g2.clearBuffer();
-    u8g2.drawBox(0,0,128,64);
-    u8g2.sendBuffer();
-    delay(500);
-    //cursor flash
-    for (int i = 0; i < 3; i++) {
-    
-    u8g2.setDrawColor(1);
-    u8g2.clearBuffer();
-    u8g2.drawBox(1,1,3,5);
-    u8g2.sendBuffer();
-    delay(300);
-    
-    u8g2.clearBuffer();
-    u8g2.setDrawColor(0);
-    u8g2.drawBox(1,1,3,5);
-    u8g2.sendBuffer();
-    delay(300);
-    }
-   
-    u8g2.setDrawColor(1);
-    u8g2.clearBuffer();
+delay(100);
+}
+
+for (int trench = 1; trench<100; trench++){
+u8g2.drawXBMP(32, 0, 62, 64, trenchallArray[trench]);
+u8g2.nextPage();
+delay(100);
+}
+u8g2.clearBuffer();
+u8g2.firstPage();
+for (int boom = 1; boom<100; boom++){
+u8g2.drawXBMP(32, 5, 64, 54, boomallArray[boom]);
+u8g2.nextPage();
+delay(100);
+}
+u8g2.clearBuffer();
+u8g2.sendBuffer();
+delay(5000);
+
 }
 
 void clearOLED(){
@@ -518,7 +532,4 @@ void clearOLED(){
 
 }
 
-void explode(){
 
-  
-}
